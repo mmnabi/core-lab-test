@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using LabTest.API.Mapping;
 
 namespace LabTest.API
 {
@@ -26,6 +28,14 @@ namespace LabTest.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // AutoMapper
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             // DbContext
             services.AddDbContext<LabTestDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
