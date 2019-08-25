@@ -28,5 +28,14 @@ namespace LabTest.API.Controllers
             var users = await context.Users.ToListAsync();
             return mapper.Map<List<User>, List<UserResource>>(users);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(UserResource userResourse)
+        {
+            var user = mapper.Map<User>(userResourse);
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+            return Ok(user);
+        }
     }
 }
