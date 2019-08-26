@@ -32,10 +32,20 @@ namespace LabTest.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserResource userResourse)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (!userResourse.Password.Equals(userResourse.ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
+                return BadRequest(ModelState);
+            }
+
             var user = mapper.Map<User>(userResourse);
             context.Users.Add(user);
             await context.SaveChangesAsync();
-            return Ok(user);
+
+            var result = mapper.Map<UserResource>(user);
+            return Ok(result);
         }
     }
 }

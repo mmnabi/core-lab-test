@@ -13,7 +13,8 @@ namespace LabTest.API.Mapping
         public MappingProfile()
         {
             // Domain to Resource
-            CreateMap<User, UserResource>();
+            CreateMap<User, UserResource>()
+                .ForMember(e => e.Password, opt => opt.Ignore());
 
 
             // Resource to Domain
